@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Mapa de Problemas Urbanos — Rondonópolis</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div id="app">
+
+  <header class="top">
+    <div class="row">
+      <div class="brand-mark" id="brand-mark"></div>
+      <div class="brand-text">
+        <h1>Mapa de Problemas Urbanos</h1>
+        <div class="place"><span class="status-dot"></span>Prefeitura de Rondonópolis · Ouvidoria Digital</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- MAPA PÚBLICO -->
+    <section class="view active" id="view-mapa">
+      <div class="hero-cta" id="hero-cta">
+        <p class="hero-cta-text">Viu um problema na sua rua?</p>
+        <button class="btn btn-primary btn-block" id="btn-hero-registrar" type="button">+ Registrar problema</button>
+      </div>
+      <div class="filters-bar" id="cat-filters"></div>
+      <div id="map-public"></div>
+      <div class="legend-strip" id="legend-strip"></div>
+    </section>
+
+    <!-- REGISTRAR -->
+    <section class="view" id="view-registrar">
+      <div class="scroll-pad" id="registrar-form">
+        <div class="section-label"><span class="num">1</span>Localização</div>
+        <select id="bairro-select"></select>
+        <div class="loc-actions">
+          <button class="btn btn-ghost" id="btn-gps" type="button"></button>
+        </div>
+        <div id="map-pick"></div>
+        <div class="section-hint">Toque no mapa para ajustar o ponto exato.</div>
+
+        <div class="section-label"><span class="num">2</span>Descreva o problema</div>
+        <textarea id="desc-input" placeholder="Descreva o que você encontrou (ex: buraco grande na via, poste sem luz há 2 semanas...)"></textarea>
+        <div class="photo-row">
+          <div id="photo-preview-wrap"><div class="photo-empty" id="photo-empty"></div></div>
+          <button class="btn btn-ghost" id="btn-photo" type="button"></button>
+          <input type="file" id="photo-input" accept="image/*" capture="environment" style="display:none;">
+        </div>
+
+        <button class="btn btn-primary btn-block" id="btn-submit" type="button">Enviar ocorrência</button>
+      </div>
+
+      <div class="scroll-pad" id="registrar-confirm" style="display:none;">
+        <div class="confirm-card">
+          <div class="check-wrap" id="confirm-check"></div>
+          <p class="lead">Ocorrência registrada</p>
+          <div class="proto" id="confirm-proto">—</div>
+          <p>Guarde este protocolo para acompanhar o andamento na aba "Protocolo".</p>
+        </div>
+        <button class="btn btn-ghost btn-block" id="btn-new" type="button">Registrar outra ocorrência</button>
+      </div>
+    </section>
+
+    <!-- PROTOCOLO -->
+    <section class="view" id="view-protocolo">
+      <div class="scroll-pad">
+        <div class="section-label" style="margin-top:0;"><span class="num" id="proto-icon-slot"></span>Consultar andamento</div>
+        <div class="proto-search">
+          <input type="text" id="proto-input" placeholder="Ex: RDN-482-917">
+          <button class="btn btn-primary" id="btn-proto-search" type="button"></button>
+        </div>
+        <div id="proto-result"></div>
+      </div>
+    </section>
+
+    <!-- PAINEL -->
+    <section class="view" id="view-painel">
+      <div id="painel-gate" class="gate">
+        <div class="gate-icon" id="gate-icon"></div>
+        <h2>Painel da Prefeitura</h2>
+        <p>Área restrita à equipe municipal. Em produção, o acesso seria controlado por perfil de usuário (item 12 da governança do projeto).</p>
+        <button class="btn btn-primary" id="btn-enter-panel" type="button">Entrar como equipe municipal</button>
+      </div>
+
+      <div id="painel-content" style="display:none; flex:1; overflow-y:auto;">
+        <div class="kpi-grid" id="kpi-grid"></div>
+
+        <div class="bar-panel">
+          <h3>Distribuição por categoria</h3>
+          <div id="bar-cat"></div>
+        </div>
+
+        <div class="bar-panel">
+          <h3>Distribuição por status</h3>
+          <div id="bar-status"></div>
+        </div>
+
+        <div class="bar-panel">
+          <h3>Bairros — mais e menos ocorrências</h3>
+          <input type="text" id="bairro-rank-search" placeholder="Buscar bairro..." style="margin-bottom:12px;">
+          <div id="bar-bairro" style="max-height:320px; overflow-y:auto;"></div>
+        </div>
+
+        <div class="section-label" style="padding:0 16px;">Ocorrências</div>
+        <div class="adm-filters" id="adm-filters"></div>
+        <div class="adm-list" id="adm-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tabbar">
+    <button class="tab-btn active" data-view="mapa"></button>
+    <button class="tab-btn" data-view="registrar"></button>
+    <button class="tab-btn" data-view="protocolo"></button>
+    <button class="tab-btn" data-view="painel"></button>
+  </nav>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
