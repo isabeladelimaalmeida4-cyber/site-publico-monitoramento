@@ -194,7 +194,7 @@
   /* ---------------- STATE ---------------- */
   var pickedLatLng = null;
   var selectedBairro = "";
-  var pendingPhoto = null;
+  var pendingPhotoBlob = null;
   var mapPublic, mapPick, pickMarker;
   var publicMarkers = [];
   var activeCatFilter = "todas";
@@ -450,21 +450,32 @@
     reader.onload = function(ev){
       var img = new Image();
       img.onload = function(){
-        var maxW = 240;
+        var maxW = 1280; // qualidade boa o bastante pra equipe avaliar o problema
         var scale = Math.min(1, maxW/img.width);
         var canvas = document.createElement("canvas");
         canvas.width = img.width*scale;
         canvas.height = img.height*scale;
         var ctx = canvas.getContext("2d");
         ctx.drawImage(img,0,0,canvas.width,canvas.height);
-        pendingPhoto = canvas.toDataURL("image/jpeg", 0.6);
         var wrap = document.getElementById("photo-preview-wrap");
-        wrap.innerHTML = '<img class="photo-thumb" src="'+pendingPhoto+'">';
+        wrap.innerHTML = '<img class="photo-thumb" src="'+canvas.toDataURL("image/jpeg",0.5)+'">';
+        // Blob de verdade (menor que base64) — é o que sobe pro Supabase Storage no envio
+        canvas.toBlob(function(blob){ pendingPhotoBlob = blob; }, "image/jpeg", 0.72);
       };
       img.src = ev.target.result;
     };
     reader.readAsDataURL(file);
   });
+
+  // Envia a foto pro Supabase Storage e devolve a URL pública (ou null se não houver foto/falhar)
+  async function uploadPhotoIfAny(protocolo){
+    if(!pendingPhotoBlob) return null;
+    var path = protocolo + "-" + Date.now() + ".jpg";
+    var up = await sb.storage.from("ocorrencias-fotos").upload(path, pendingPhotoBlob, { contentType: "image/jpeg", upsert: false });
+    if(up.error) return null;
+    var pub = sb.storage.from("ocorrencias-fotos").getPublicUrl(path);
+    return pub.data ? pub.data.publicUrl : null;
+  }
 
   /* ---------------- SUBMIT ---------------- */
   document.getElementById("btn-submit").addEventListener("click", async function(){
@@ -478,6 +489,7 @@
 
     var proto = nextProtocol();
     var now = new Date().toISOString();
+    var photoUrl = await uploadPhotoIfAny(proto);
     var occurrence = {
       id: proto,
       category: "outros", // a categorização fina fica a cargo da equipe, no painel administrativo
@@ -486,7 +498,7 @@
       lat: pickedLatLng.lat,
       lng: pickedLatLng.lng,
       status: "recebido",
-      photo: pendingPhoto,
+      photo: photoUrl,
       createdAt: now,
       updatedAt: now,
       history: [{status:"recebido", date:now}]
@@ -508,7 +520,7 @@
 
   document.getElementById("btn-new").addEventListener("click", function(){
     selectedBairro = "";
-    pendingPhoto = null;
+    pendingPhotoBlob = null;
     pickedLatLng = null;
     document.getElementById("desc-input").value = "";
     document.getElementById("bairro-select").selectedIndex = 0;
