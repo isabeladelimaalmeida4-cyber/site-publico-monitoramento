@@ -722,72 +722,22 @@
   }
 
   /* ---------------- INIT ---------------- */
-  function makeBuilding(spinner, cx, cy, w, d, h, cTop, cFront, cSide){
-    var CENTER = 160; // metade de 320px (tamanho do palco .city-scene)
-    var wrap = document.createElement("div");
-    wrap.className = "bldg";
-    wrap.style.left = (CENTER + cx - w/2) + "px";
-    wrap.style.top = (CENTER + cy - h) + "px"; // base encostada no chão (z=0 fica na base)
-    wrap.style.width = w + "px";
-    wrap.style.height = h + "px";
-
-    var front = document.createElement("div");
-    front.className = "f";
-    front.style.cssText = "left:0; top:0; width:"+w+"px; height:"+h+"px; background:"+cFront+"; transform:translateZ("+(d/2)+"px);";
-
-    var side = document.createElement("div");
-    side.className = "f";
-    side.style.cssText = "left:"+w+"px; top:0; width:"+d+"px; height:"+h+"px; background:"+cSide+"; transform-origin:left; transform:rotateY(90deg);";
-
-    var top = document.createElement("div");
-    top.className = "f";
-    top.style.cssText = "left:0; top:0; width:"+w+"px; height:"+d+"px; background:"+cTop+"; transform-origin:top; transform:rotateX(90deg);";
-
-    wrap.appendChild(front); wrap.appendChild(side); wrap.appendChild(top);
-    spinner.appendChild(wrap);
-  }
-
-  function buildCityScene(){
-    var spinner = document.getElementById("city-spinner");
-    if(!spinner) return;
-
-    var ground1 = document.createElement("div"); ground1.className = "ground-plate";
-    var ground2 = document.createElement("div"); ground2.className = "ground-ring";
-    spinner.appendChild(ground1); spinner.appendChild(ground2);
-
-    // Paleta: azul-marinho para as fachadas, dourado só no prédio-marco (identidade da marca)
-    var NAVY_F = "#123B6B", NAVY_S = "#0A2748", NAVY_T = "#1E5C9E";
-    var GOLD_F = "#93600F", GOLD_S = "#6E480B", GOLD_T = "#B8791A";
-
-    // Layout de um quarteirão irregular em torno do centro (cx=0, cy=0 é o eixo de giro)
-    var buildings = [
-      { x:-70, y:-30, w:34, d:34, h:58 },
-      { x:-22, y:-55, w:30, d:30, h:88 },
-      { x:  20,y:-40, w:26, d:26, h:46 },
-      { x:  62,y:-18, w:32, d:32, h:70 },
-      { x:-55, y: 20, w:26, d:26, h:36 },
-      { x: -8, y: 15, w:24, d:24, h:112, landmark:true }, // prédio-marco, dourado
-      { x:  34,y: 35, w:30, d:30, h:54 },
-      { x:  70,y: 30, w:24, d:24, h:30 },
-      { x:-40, y: 62, w:22, d:22, h:28 },
-      { x:   5,y: 62, w:26, d:26, h:40 }
-    ];
-
-    buildings.forEach(function(b){
-      if(b.landmark){
-        makeBuilding(spinner, b.x, b.y, b.w, b.d, b.h, GOLD_T, GOLD_F, GOLD_S);
-      }else{
-        makeBuilding(spinner, b.x, b.y, b.w, b.d, b.h, NAVY_T, NAVY_F, NAVY_S);
-      }
-    });
-  }
-
   function initIntroSplash(){
     var splash = document.getElementById("intro-splash");
     if(!splash) return;
-    try{ buildCityScene(); }catch(e){}
+    try{
+      var introMap = L.map("intro-map", {
+        zoomControl:false, dragging:false, scrollWheelZoom:false, doubleClickZoom:false,
+        boxZoom:false, keyboard:false, attributionControl:false, touchZoom:false, fadeAnimation:false
+      }).setView(CITY_CENTER, 14.2);
+      // Satélite gratuito (Esri World Imagery) — não precisa de chave de API
+      L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+        maxZoom:19
+      }).addTo(introMap);
+      setTimeout(function(){ introMap.invalidateSize(); }, 30);
+    }catch(e){}
     // Some do DOM depois da animação (o CSS já esconde visualmente antes disso)
-    setTimeout(function(){ if(splash.parentNode) splash.parentNode.removeChild(splash); }, 3700);
+    setTimeout(function(){ if(splash.parentNode) splash.parentNode.removeChild(splash); }, 3800);
   }
 
   async function init(){

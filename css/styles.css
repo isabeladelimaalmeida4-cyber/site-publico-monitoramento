@@ -253,37 +253,38 @@
   }
   .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
 
-  /* ---------- INTRO: cidade estilizada em 3D (blocos low-poly girando), sem mapa real ---------- */
+  /* ---------- INTRO: satélite de Rondonópolis em tela cheia, com leve giro/zoom 3D (poucos segundos) ---------- */
   #intro-splash{
-    position:fixed; top:0; right:0; bottom:0; left:0; z-index:3000; background:var(--blue-900);
-    display:flex; align-items:center; justify-content:center; overflow:hidden;
-    animation:intro-fade-out .6s ease 3.0s forwards;
+    position:fixed; top:0; right:0; bottom:0; left:0; z-index:3000; background:#0A1420;
+    overflow:hidden; perspective:1200px;
+    animation:intro-fade-out .6s ease 3.1s forwards;
   }
-  .city-scene{ width:320px; height:320px; perspective:850px; }
-  .city-platform{ width:100%; height:100%; position:relative; transform-style:preserve-3d; transform:rotateX(56deg); }
-  .city-spinner{ width:100%; height:100%; position:relative; transform-style:preserve-3d; animation:city-spin 3.2s cubic-bezier(.4,.1,.3,1) 1; }
-  @keyframes city-spin{ from{ transform:rotateZ(0deg); } to{ transform:rotateZ(360deg); } }
-  .bldg{ position:absolute; transform-style:preserve-3d; }
-  .bldg .f{ position:absolute; }
-  .ground-plate{
-    position:absolute; left:50%; top:50%; width:270px; height:270px; margin:-135px 0 0 -135px;
-    border-radius:50%; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.14);
+  #intro-splash #intro-map{
+    position:absolute; top:-8%; left:-8%; width:116%; height:116%;
+    transform-origin:50% 55%;
+    animation:intro-cam 3.4s cubic-bezier(.25,.1,.25,1) 1 forwards;
   }
-  .ground-ring{
-    position:absolute; left:50%; top:50%; width:210px; height:210px; margin:-105px 0 0 -105px;
-    border-radius:50%; border:1px dashed rgba(255,255,255,.12);
+  #intro-splash .leaflet-control-container{ display:none; }
+  .intro-overlay{
+    position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(180deg, rgba(6,20,36,.55) 0%, rgba(6,20,36,0) 30%, rgba(6,20,36,0) 62%, rgba(6,20,36,.75) 100%);
   }
   .intro-caption{
-    position:absolute; left:0; right:0; bottom:44px; text-align:center; color:#fff;
+    position:absolute; left:0; right:0; bottom:38px; text-align:center; color:#fff;
     opacity:0; animation:intro-caption-in .6s ease .5s forwards;
   }
   .intro-city{ font-size:26px; font-weight:800; letter-spacing:.01em; }
-  .intro-sub{ font-size:12.5px; font-weight:600; color:#9FB3C8; margin-top:4px; text-transform:uppercase; letter-spacing:.08em; }
+  .intro-sub{ font-size:12.5px; font-weight:600; color:#C9D8E8; margin-top:4px; text-transform:uppercase; letter-spacing:.08em; }
+  @keyframes intro-cam{
+    from{ transform:rotateX(28deg) rotateZ(-6deg) scale(1.5); filter:brightness(.75); }
+    55%{ transform:rotateX(14deg) rotateZ(2deg) scale(1.18); filter:brightness(.92); }
+    to{ transform:rotateX(0deg) rotateZ(0deg) scale(1); filter:brightness(1); }
+  }
   @keyframes intro-caption-in{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
   @keyframes intro-fade-out{ from{opacity:1; visibility:visible;} to{opacity:0; visibility:hidden;} }
 
-  /* Sem animação para quem prefere menos movimento: mostra parado e some direto */
+  /* Sem anima\u00e7\u00e3o para quem prefere menos movimento: mostra parado e some direto */
   @media (prefers-reduced-motion: reduce){
-    .city-spinner{ animation:none; }
+    #intro-splash #intro-map{ animation:none; }
     #intro-splash{ animation:intro-fade-out .4s ease .9s forwards; }
   }
