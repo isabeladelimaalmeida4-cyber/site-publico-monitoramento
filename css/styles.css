@@ -253,20 +253,20 @@
   }
   .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
 
-  /* ---------- INTRO: satélite de Rondonópolis em tela cheia, com leve giro/zoom 3D (poucos segundos) ---------- */
+  /* ---------- INTRO: satélite de Rondonópolis em tela cheia, com zoom suave (poucos segundos) ---------- */
   #intro-splash{
     position:fixed; top:0; right:0; bottom:0; left:0; z-index:3000; background:#0A1420;
-    overflow:hidden; perspective:1200px;
+    overflow:hidden;
     animation:intro-fade-out .6s ease 3.1s forwards;
   }
   #intro-splash #intro-map{
-    position:absolute; top:-8%; left:-8%; width:116%; height:116%;
-    transform-origin:50% 55%;
-    animation:intro-cam 3.4s cubic-bezier(.25,.1,.25,1) 1 forwards;
+    position:absolute; top:-5%; left:-5%; width:110%; height:110%;
+    transform-origin:50% 50%;
+    animation:intro-cam 3.2s cubic-bezier(.16,.6,.2,1) 1 forwards;
   }
   #intro-splash .leaflet-control-container{ display:none; }
   .intro-overlay{
-    position:absolute; inset:0; pointer-events:none;
+    position:absolute; top:0; right:0; bottom:0; left:0; pointer-events:none;
     background:linear-gradient(180deg, rgba(6,20,36,.55) 0%, rgba(6,20,36,0) 30%, rgba(6,20,36,0) 62%, rgba(6,20,36,.75) 100%);
   }
   .intro-caption{
@@ -276,14 +276,13 @@
   .intro-city{ font-size:26px; font-weight:800; letter-spacing:.01em; }
   .intro-sub{ font-size:12.5px; font-weight:600; color:#C9D8E8; margin-top:4px; text-transform:uppercase; letter-spacing:.08em; }
   @keyframes intro-cam{
-    from{ transform:rotateX(28deg) rotateZ(-6deg) scale(1.5); filter:brightness(.75); }
-    55%{ transform:rotateX(14deg) rotateZ(2deg) scale(1.18); filter:brightness(.92); }
-    to{ transform:rotateX(0deg) rotateZ(0deg) scale(1); filter:brightness(1); }
+    from{ transform:scale(1.4); filter:brightness(.78); }
+    to{ transform:scale(1); filter:brightness(1); }
   }
   @keyframes intro-caption-in{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
   @keyframes intro-fade-out{ from{opacity:1; visibility:visible;} to{opacity:0; visibility:hidden;} }
 
-  /* Sem anima\u00e7\u00e3o para quem prefere menos movimento: mostra parado e some direto */
+  /* Sem animação para quem prefere menos movimento: mostra parado e some direto */
   @media (prefers-reduced-motion: reduce){
     #intro-splash #intro-map{ animation:none; }
     #intro-splash{ animation:intro-fade-out .4s ease .9s forwards; }
