@@ -252,3 +252,35 @@
     box-shadow:0 10px 26px -8px rgba(6,24,47,.5);
   }
   .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+  /* ---------- INTRO: mapa girando em 3D (só na abertura, poucos segundos) ---------- */
+  #intro-splash{
+    position:fixed; top:0; right:0; bottom:0; left:0; z-index:3000; background:var(--blue-900);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px;
+    animation:intro-fade-out .5s ease 2.1s forwards;
+  }
+  .intro-stage{ perspective:900px; }
+  .intro-globe{
+    width:180px; height:180px; border-radius:50%; overflow:hidden;
+    border:3px solid rgba(255,255,255,.25);
+    transform-style:preserve-3d;
+    animation:intro-spin 1.9s cubic-bezier(.22,.75,.32,1) 1;
+  }
+  .intro-globe #intro-map{ width:100%; height:100%; pointer-events:none; }
+  .intro-caption{
+    color:#EAF2FA; font-size:13px; font-weight:600; letter-spacing:.04em;
+    opacity:0; animation:intro-caption-in .5s ease .3s forwards;
+  }
+  @keyframes intro-spin{
+    from{ transform:rotateY(0deg) rotateX(12deg) scale(.85); }
+    60%{ transform:rotateY(300deg) rotateX(12deg) scale(1.02); }
+    to{ transform:rotateY(360deg) rotateX(0deg) scale(1); }
+  }
+  @keyframes intro-caption-in{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+  @keyframes intro-fade-out{ from{opacity:1; visibility:visible;} to{opacity:0; visibility:hidden;} }
+
+  /* Sem animação para quem prefere menos movimento: mostra e some direto, sem girar */
+  @media (prefers-reduced-motion: reduce){
+    .intro-globe{ animation:none; }
+    #intro-splash{ animation:intro-fade-out .4s ease .6s forwards; }
+  }

@@ -722,7 +722,23 @@
   }
 
   /* ---------------- INIT ---------------- */
+  function initIntroSplash(){
+    var splash = document.getElementById("intro-splash");
+    if(!splash) return;
+    try{
+      var introMap = L.map("intro-map", {
+        zoomControl:false, dragging:false, scrollWheelZoom:false, doubleClickZoom:false,
+        boxZoom:false, keyboard:false, attributionControl:false, touchZoom:false
+      }).setView(CITY_CENTER, 12.4);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:19}).addTo(introMap);
+      setTimeout(function(){ introMap.invalidateSize(); }, 50);
+    }catch(e){}
+    // some do DOM depois da animação (CSS já esconde visualmente antes disso)
+    setTimeout(function(){ if(splash.parentNode) splash.parentNode.removeChild(splash); }, 2700);
+  }
+
   async function init(){
+    initIntroSplash();
     buildCatFilters();
     buildLegend();
     buildBairroSelect();
