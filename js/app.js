@@ -76,15 +76,15 @@
   ];
 
   var STATUSES = [
-    {id:"recebido", label:"Recebido", hex:"#7C8AA0"},
-    {id:"triagem", label:"Em triagem", hex:"#E8A33D"},
-    {id:"encaminhado", label:"Encaminhado", hex:"#3072B8"},
-    {id:"atendimento", label:"Em atendimento", hex:"#DB7A2C"},
-    {id:"validacao", label:"Aguardando validação", hex:"#7A5FC4"},
-    {id:"resolvido", label:"Resolvido", hex:"#1E9E6B"},
-    {id:"duplicado", label:"Duplicado", hex:"#93A0B0"},
-    {id:"improcedente", label:"Improcedente", hex:"#C0442F"},
-    {id:"fora_competencia", label:"Fora da competência municipal", hex:"#93A0B0"}
+    {id:"recebido", label:"Recebido", hex:"#5C6570"},
+    {id:"triagem", label:"Em triagem", hex:"#B8791A"},
+    {id:"encaminhado", label:"Encaminhado", hex:"#5C6570"},
+    {id:"atendimento", label:"Em atendimento", hex:"#B8791A"},
+    {id:"validacao", label:"Aguardando validação", hex:"#B8791A"},
+    {id:"resolvido", label:"Resolvido", hex:"#3A6B45"},
+    {id:"duplicado", label:"Duplicado", hex:"#8A929B"},
+    {id:"improcedente", label:"Improcedente", hex:"#A23B2E"},
+    {id:"fora_competencia", label:"Fora da competência municipal", hex:"#8A929B"}
   ];
   var STATUS_FLOW = ["recebido","triagem","encaminhado","atendimento","validacao","resolvido"];
 
