@@ -728,13 +728,16 @@
     try{
       var introMap = L.map("intro-map", {
         zoomControl:false, dragging:false, scrollWheelZoom:false, doubleClickZoom:false,
-        boxZoom:false, keyboard:false, attributionControl:false, touchZoom:false
-      }).setView(CITY_CENTER, 12.4);
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:19}).addTo(introMap);
-      setTimeout(function(){ introMap.invalidateSize(); }, 50);
+        boxZoom:false, keyboard:false, attributionControl:false, touchZoom:false, fadeAnimation:false
+      }).setView(CITY_CENTER, 14.2);
+      // Satélite gratuito (Esri World Imagery) — não precisa de chave de API
+      L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+        maxZoom:19
+      }).addTo(introMap);
+      setTimeout(function(){ introMap.invalidateSize(); }, 30);
     }catch(e){}
-    // some do DOM depois da animação (CSS já esconde visualmente antes disso)
-    setTimeout(function(){ if(splash.parentNode) splash.parentNode.removeChild(splash); }, 2700);
+    // Some do DOM depois da animação (o CSS já esconde visualmente antes disso)
+    setTimeout(function(){ if(splash.parentNode) splash.parentNode.removeChild(splash); }, 3800);
   }
 
   async function init(){
