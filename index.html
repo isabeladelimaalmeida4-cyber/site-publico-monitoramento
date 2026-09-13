@@ -65,7 +65,10 @@
     <!-- REGISTRAR -->
     <section class="view" id="view-registrar">
       <div class="scroll-pad" id="registrar-form">
-        <div class="section-label"><span class="num">1</span>Localização</div>
+        <div class="section-label"><span class="num">1</span>Categoria do problema</div>
+        <div class="cat-grid" id="cat-grid"></div>
+
+        <div class="section-label"><span class="num">2</span>Localização</div>
         <select id="bairro-select"></select>
         <div class="loc-actions">
           <button class="btn btn-ghost" id="btn-gps" type="button"></button>
@@ -73,7 +76,7 @@
         <div id="map-pick"></div>
         <div class="section-hint">Toque no mapa para ajustar o ponto exato.</div>
 
-        <div class="section-label"><span class="num">2</span>Descreva o problema</div>
+        <div class="section-label"><span class="num">3</span>Descreva o problema</div>
         <textarea id="desc-input" placeholder="Descreva o que você encontrou (ex: buraco grande na via, poste sem luz há 2 semanas...)"></textarea>
         <div class="photo-row">
           <div id="photo-preview-wrap"><div class="photo-empty" id="photo-empty"></div></div>

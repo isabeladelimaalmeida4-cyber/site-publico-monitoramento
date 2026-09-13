@@ -193,6 +193,7 @@
 
   /* ---------------- STATE ---------------- */
   var pickedLatLng = null;
+  var selectedCategory = null;
   var selectedBairro = "";
   var pendingPhotoBlob = null;
   var mapPublic, mapPick, pickMarker;
@@ -351,6 +352,23 @@
     });
   }
 
+  /* ---------------- CATEGORY GRID (registrar) ---------------- */
+  function buildCatGrid(){
+    var grid = document.getElementById("cat-grid");
+    grid.innerHTML = "";
+    CATEGORIES.forEach(function(c){
+      var b = document.createElement("div");
+      b.className = "cat-btn";
+      b.innerHTML = catIcon(c.id).replace('width="13" height="13"','width="21" height="21"') + '<span>'+c.label+'</span>';
+      b.addEventListener("click", function(){
+        selectedCategory = c.id;
+        document.querySelectorAll(".cat-btn").forEach(function(x){ x.classList.remove("sel"); });
+        b.classList.add("sel");
+      });
+      grid.appendChild(b);
+    });
+  }
+
   /* ---------------- BAIRRO SELECT (registrar) ---------------- */
   function buildBairroSelect(){
     var sel = document.getElementById("bairro-select");
@@ -479,6 +497,7 @@
 
   /* ---------------- SUBMIT ---------------- */
   document.getElementById("btn-submit").addEventListener("click", async function(){
+    if(!selectedCategory){ showToast("Selecione uma categoria."); return; }
     if(!selectedBairro){ showToast("Selecione o bairro."); return; }
     if(!pickedLatLng){ showToast("Marque a localização no mapa."); return; }
     var desc = document.getElementById("desc-input").value.trim();
@@ -492,7 +511,7 @@
     var photoUrl = await uploadPhotoIfAny(proto);
     var occurrence = {
       id: proto,
-      category: "outros", // a categorização fina fica a cargo da equipe, no painel administrativo
+      category: selectedCategory,
       bairro: selectedBairro,
       description: desc,
       lat: pickedLatLng.lat,
@@ -519,11 +538,13 @@
   });
 
   document.getElementById("btn-new").addEventListener("click", function(){
+    selectedCategory = null;
     selectedBairro = "";
     pendingPhotoBlob = null;
     pickedLatLng = null;
     document.getElementById("desc-input").value = "";
     document.getElementById("bairro-select").selectedIndex = 0;
+    document.querySelectorAll(".cat-btn").forEach(function(x){ x.classList.remove("sel"); });
     document.getElementById("photo-preview-wrap").innerHTML = '<div class="photo-empty" id="photo-empty">'+icon("camera",20)+'</div>';
     if(pickMarker){ mapPick.removeLayer(pickMarker); pickMarker=null; }
     document.getElementById("registrar-form").style.display = "block";
@@ -744,6 +765,7 @@
     initIntroSplash();
     buildCatFilters();
     buildLegend();
+    buildCatGrid();
     buildBairroSelect();
     initMaps();
     await loadOccurrences();
