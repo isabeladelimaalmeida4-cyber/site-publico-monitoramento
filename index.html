@@ -112,14 +112,7 @@
 
     <!-- PAINEL -->
     <section class="view" id="view-painel">
-      <div id="painel-gate" class="gate">
-        <div class="gate-icon" id="gate-icon"></div>
-        <h2>Painel da Prefeitura</h2>
-        <p>Área restrita à equipe municipal. Em produção, o acesso seria controlado por perfil de usuário (item 12 da governança do projeto).</p>
-        <button class="btn btn-primary" id="btn-enter-panel" type="button">Entrar como equipe municipal</button>
-      </div>
-
-      <div id="painel-content" style="display:none; flex:1; overflow-y:auto;">
+      <div id="painel-content" style="display:flex; flex:1; overflow-y:auto; flex-direction:column;">
         <div class="kpi-grid" id="kpi-grid"></div>
 
         <div class="bar-panel">

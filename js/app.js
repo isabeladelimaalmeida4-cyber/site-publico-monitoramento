@@ -41,7 +41,6 @@
   /* ---------------- STATIC ICON SLOTS ---------------- */
   document.getElementById("brand-mark").innerHTML = icon("shield", 21);
   document.getElementById("photo-empty").innerHTML = icon("camera", 20);
-  document.getElementById("gate-icon").innerHTML = icon("building", 26);
   document.getElementById("confirm-check").innerHTML = icon("check", 26);
   document.getElementById("btn-gps").innerHTML = icon("gps", 15) + '<span>Usar minha localização</span>';
   document.getElementById("btn-photo").innerHTML = icon("camera", 15) + '<span>Anexar foto (opcional)</span>';
@@ -320,8 +319,8 @@
     if(name === "registrar"){
       setTimeout(function(){ if(mapPick) mapPick.invalidateSize(); }, 50);
     }
-    if(name === "painel" && document.getElementById("painel-content").style.display !== "none"){
-      renderPainel();
+    if(name === "painel"){
+      loadOccurrences().then(renderPainel);
     }
   }
 
@@ -587,13 +586,6 @@
   }
 
   /* ---------------- PAINEL ---------------- */
-  document.getElementById("btn-enter-panel").addEventListener("click", async function(){
-    document.getElementById("painel-gate").style.display = "none";
-    document.getElementById("painel-content").style.display = "flex";
-    document.getElementById("painel-content").style.flexDirection = "column";
-    await loadOccurrences();
-    renderPainel();
-  });
 
   function buildAdmFilters(){
     var wrap = document.getElementById("adm-filters");
