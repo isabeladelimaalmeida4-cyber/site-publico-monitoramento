@@ -320,7 +320,8 @@
       setTimeout(function(){ if(mapPick) mapPick.invalidateSize(); }, 50);
     }
     if(name === "painel"){
-      loadOccurrences().then(renderPainel);
+      renderPainel(); // mostra na hora com os dados já carregados, sem esperar a rede
+      loadOccurrences().then(renderPainel); // atualiza em segundo plano, sem piscar a tela
     }
   }
 
