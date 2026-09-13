@@ -80,6 +80,7 @@
     {id:"triagem", label:"Em triagem", hex:"#B8791A"},
     {id:"encaminhado", label:"Encaminhado", hex:"#5C6570"},
     {id:"atendimento", label:"Em atendimento", hex:"#B8791A"},
+    {id:"prazo_estendido", label:"Prazo estendido", hex:"#1463AD"},
     {id:"validacao", label:"Aguardando validação", hex:"#B8791A"},
     {id:"resolvido", label:"Resolvido", hex:"#3A6B45"},
     {id:"duplicado", label:"Duplicado", hex:"#8A929B"},
